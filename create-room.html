@@ -1,1 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Room - NiamChat</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Additional styles for create-room page */
+        .create-room-page {
+            padding: 0;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header-title {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header-subtitle {
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            background: white;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: #f5f5f5;
+            color: #667eea;
+        }
+        
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .page-content {
+            display: flex;
+            min-height: 500px;
+        }
+        
+        .left-panel {
+            flex: 1;
+            padding: 30px;
+            border-right: 1px solid #eee;
+        }
+        
+        .right-panel {
+            flex: 1;
+            padding: 30px;
+            background: #f9f9f9;
+        }
+        
+        .panel-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        textarea.form-input {
+            min-height: 150px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .create-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .create-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .past-rooms-list {
+            list-style: none;
+        }
+        
+        .past-room-item {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .room-info h4 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        
+        .room-info p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .room-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn.join {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .action-btn.join:hover {
+            background: #5a6fd8;
+        }
+        
+        .action-btn.rename {
+            background: #f8f9fa;
+            color: #666;
+        }
+        
+        .action-btn.rename:hover {
+            background: #e9ecef;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        @media (max-width: 768px) {
+            .page-content {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container create-room-page">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="header-title">Create Private Room</h1>
+            <p class="header-subtitle">Create your own secure chat room</p>
+        </div>
 
+        <!-- Navigation Menu -->
+        <div class="nav-menu">
+            <a href="create-room.html" class="nav-btn active">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 .83.18 2 2 0 0 0 .83-.18l8.58-3.9a1 1 0 0 0 0-1.831z"/>
+                    <path d="M16 17h6"/>
+                    <path d="M19 14v6"/>
+                    <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 .825.178"/>
+                    <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l2.116-.962"/>
+                </svg>
+                Create Room
+            </a>
+            
+            <a href="join-room.html" class="nav-btn">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
+                    <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
+                    <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+                </svg>
+                Join Room
+            </a>
+            
+            <a href="https://niamco.github.io/niamchat/" class="nav-btn">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+                    <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                </svg>
+                Back to Main
+            </a>
+        </div>
+
+        <!-- Page Content - Two Panels -->
+        <div class="page-content">
+            <!-- Left Panel: Create Room Form -->
+            <div class="left-panel">
+                <h2 class="panel-title">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 .83.18 2 2 0 0 0 .83-.18l8.58-3.9a1 1 0 0 0 0-1.831z"/>
+                        <path d="M16 17h6"/>
+                        <path d="M19 14v6"/>
+                        <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 .825.178"/>
+                        <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l2.116-.962"/>
+                    </svg>
+                    Create New Room
+                </h2>
+                
+                <form id="createRoomForm">
+                    <div class="form-group">
+                        <label class="form-label">Room Name</label>
+                        <input type="text" class="form-input" id="roomName" placeholder="Enter room name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Room Rules</label>
+                        <textarea class="form-input" id="roomRules" placeholder="Set rules for your room... (Optional)"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Your Username</label>
+                        <input type="text" class="form-input" id="username" placeholder="Enter your username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Room Code (Auto-generated)</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="text" class="form-input" id="roomCode" placeholder="Click generate" readonly style="flex: 1;">
+                            <button type="button" id="generateCode" class="action-btn" style="white-space: nowrap;">Generate</button>
+                        </div>
+                        <small style="color: #666; margin-top: 5px; display: block;">Room code will be 6 characters like ABC123</small>
+                    </div>
+                    
+                    <button type="submit" class="create-btn">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 .83.18 2 2 0 0 0 .83-.18l8.58-3.9a1 1 0 0 0 0-1.831z"/>
+                            <path d="M16 17h6"/>
+                            <path d="M19 14v6"/>
+                            <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 .825.178"/>
+                            <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l2.116-.962"/>
+                        </svg>
+                        Create Room
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right Panel: Past Rooms -->
+            <div class="right-panel">
+                <h2 class="panel-title">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
+                        <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
+                        <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+                    </svg>
+                    Your Past Rooms
+                </h2>
+                
+                <ul class="past-rooms-list" id="pastRoomsList">
+                    <!-- Past rooms will be loaded here -->
+                    <li class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
+                            <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
+                            <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+                        </svg>
+                        <p>No past rooms yet. Create your first room!</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/supabase-config.js"></script>
+    <script>
+        // Generate room code function
+        function generateRoomCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 6; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('roomCode').value = code;
+        }
+
+        // Generate code on button click
+        document.getElementById('generateCode').addEventListener('click', generateRoomCode);
+        
+        // Generate initial code on page load
+        generateRoomCode();
+
+        // Handle form submission
+        document.getElementById('createRoomForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const roomName = document.getElementById('roomName').value.trim();
+            const roomRules = document.getElementById('roomRules').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const roomCode = document.getElementById('roomCode').value.trim();
+            
+            if (!roomName || !username || !roomCode) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            if (roomCode.length !== 6) {
+                alert('Room code must be exactly 6 characters');
+                return;
+            }
+            
+            // Check if room code already exists
+            const { data: existingRooms } = await supabaseClient
+                .from('rooms')
+                .select('room_code')
+                .eq('room_code', roomCode);
+            
+            if (existingRooms && existingRooms.length > 0) {
+                alert('Room code already exists. Please generate a new one.');
+                generateRoomCode();
+                return;
+            }
+            
+            // Create the room
+            const { data, error } = await supabaseClient
+                .from('rooms')
+                .insert([
+                    {
+                        room_code: roomCode,
+                        room_name: roomName,
+                        creator_username: username,
+                        rules: roomRules || 'No rules set',
+                        kicked_users: ''
+                    }
+                ]);
+            
+            if (error) {
+                console.error('Error creating room:', error);
+                alert('Error creating room: ' + error.message);
+                return;
+            }
+            
+            // Save room to localStorage for past rooms
+            const pastRooms = JSON.parse(localStorage.getItem('niamchat_past_rooms') || '[]');
+            pastRooms.push({
+                code: roomCode,
+                name: roomName,
+                username: username,
+                created: new Date().toISOString()
+            });
+            localStorage.setItem('niamchat_past_rooms', JSON.stringify(pastRooms));
+            
+            // Redirect to the room
+            window.location.href = `room.html?room=${roomCode}&user=${encodeURIComponent(username)}`;
+        });
+
+        // Load past rooms from localStorage
+        function loadPastRooms() {
+            const pastRooms = JSON.parse(localStorage.getItem('niamchat_past_rooms') || '[]');
+            const pastRoomsList = document.getElementById('pastRoomsList');
+            
+            if (pastRooms.length === 0) {
+                pastRoomsList.innerHTML = `
+                    <li class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
+                            <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
+                            <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+                        </svg>
+                        <p>No past rooms yet. Create your first room!</p>
+                    </li>
+                `;
+                return;
+            }
+            
+            pastRoomsList.innerHTML = '';
+            pastRooms.forEach(room => {
+                const roomItem = document.createElement('li');
+                roomItem.className = 'past-room-item';
+                roomItem.innerHTML = `
+                    <div class="room-info">
+                        <h4>${room.name}</h4>
+                        <p>Code: ${room.code} • Created: ${new Date(room.created).toLocaleDateString()}</p>
+                    </div>
+                    <div class="room-actions">
+                        <button class="action-btn join" onclick="joinPastRoom('${room.code}', '${room.username}')">Join</button>
+                        <button class="action-btn rename" onclick="renamePastRoom('${room.code}')">Rename</button>
+                    </div>
+                `;
+                pastRoomsList.appendChild(roomItem);
+            });
+        }
+
+        // Join past room
+        window.joinPastRoom = function(roomCode, username) {
+            const newUsername = prompt('Enter your username for this room:', username);
+            if (newUsername && newUsername.trim()) {
+                window.location.href = `room.html?room=${roomCode}&user=${encodeURIComponent(newUsername.trim())}`;
+            }
+        };
+
+        // Rename past room (localStorage only)
+        window.renamePastRoom = function(roomCode) {
+            const pastRooms = JSON.parse(localStorage.getItem('niamchat_past_rooms') || '[]');
+            const roomIndex = pastRooms.findIndex(r => r.code === roomCode);
+            
+            if (roomIndex !== -1) {
+                const newName = prompt('Enter new room name:', pastRooms[roomIndex].name);
+                if (newName && newName.trim()) {
+                    pastRooms[roomIndex].name = newName.trim();
+                    localStorage.setItem('niamchat_past_rooms', JSON.stringify(pastRooms));
+                    loadPastRooms();
+                }
+            }
+        };
+
+        // Load past rooms on page load
+        loadPastRooms();
+    </script>
+</body>
+</html>
