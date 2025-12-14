@@ -357,8 +357,33 @@
         </div>
     </div>
 
-    <script src="js/supabase-config.js"></script>
+       <!-- Load Supabase library -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- Your configuration and main script -->
     <script>
+        // ========== SUPABASE CONFIGURATION ==========
+        const SUPABASE_URL = 'https://zfxyjvuadrhlborbwige.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmeHlqdnVhZHJobGJvcmJ3aWdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3MzAwMjUsImV4cCI6MjA4MTMwNjAyNX0.8RDKHD45xqr5Nz5FqXpF5fjRbZrVqrT6pCi4s-k2zvM';
+        
+        // Initialize Supabase
+        let supabaseClient;
+        try {
+            if (!window.supabase) {
+                throw new Error('Supabase library not loaded');
+            }
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            window.supabaseClient = supabaseClient;
+            console.log('✅ Supabase initialized successfully');
+        } catch (error) {
+            console.error('❌ Failed to initialize Supabase:', error);
+            alert('Error: Cannot connect to database. Please refresh the page.');
+        }
+        
+        // ========== YOUR MAIN SCRIPT CODE ==========
+        // (Copy ALL your existing JavaScript code from the previous create-room.html here,
+        // starting from the "// Debug function to check localStorage" line)
+        
         // Debug function to check localStorage
         function debugLocalStorage() {
             const pastRooms = JSON.parse(localStorage.getItem('niamchat_past_rooms') || '[]');
@@ -453,6 +478,11 @@
         // Handle form submission
         document.getElementById('createRoomForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            if (!supabaseClient) {
+                alert('Database connection not available. Please refresh the page.');
+                return;
+            }
             
             const roomName = document.getElementById('roomName').value.trim();
             const roomRules = document.getElementById('roomRules').value.trim();
