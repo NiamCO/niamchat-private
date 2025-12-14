@@ -222,6 +222,17 @@
                 border-bottom: 1px solid #eee;
             }
         }
+        
+        .debug-btn {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -313,6 +324,10 @@
                         </svg>
                         Create Room
                     </button>
+                    
+                    <button type="button" onclick="debugLocalStorage()" class="debug-btn">
+                        Debug localStorage (Check Console)
+                    </button>
                 </form>
             </div>
 
@@ -344,6 +359,18 @@
 
     <script src="js/supabase-config.js"></script>
     <script>
+        // Debug function to check localStorage
+        function debugLocalStorage() {
+            const pastRooms = JSON.parse(localStorage.getItem('niamchat_past_rooms') || '[]');
+            console.log('=== DEBUG localStorage ===');
+            console.log('Key: niamchat_past_rooms');
+            console.log('Number of rooms:', pastRooms.length);
+            console.log('Rooms:', pastRooms);
+            console.log('Full localStorage:', localStorage);
+            console.log('=== END DEBUG ===');
+            return pastRooms;
+        }
+        
         // Generate room code function
         function generateRoomCode() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -360,74 +387,12 @@
         // Generate initial code on page load
         generateRoomCode();
 
-        // Handle form submission
-        document.getElementById('createRoomForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const roomName = document.getElementById('roomName').value.trim();
-            const roomRules = document.getElementById('roomRules').value.trim();
-            const username = document.getElementById('username').value.trim();
-            const roomCode = document.getElementById('roomCode').value.trim();
-            
-            if (!roomName || !username || !roomCode) {
-                alert('Please fill in all required fields');
-                return;
-            }
-            
-            if (roomCode.length !== 6) {
-                alert('Room code must be exactly 6 characters');
-                return;
-            }
-            
-            // Check if room code already exists
-            const { data: existingRooms } = await supabaseClient
-                .from('rooms')
-                .select('room_code')
-                .eq('room_code', roomCode);
-            
-            if (existingRooms && existingRooms.length > 0) {
-                alert('Room code already exists. Please generate a new one.');
-                generateRoomCode();
-                return;
-            }
-            
-            // Create the room
-            const { data, error } = await supabaseClient
-                .from('rooms')
-                .insert([
-                    {
-                        room_code: roomCode,
-                        room_name: roomName,
-                        creator_username: username,
-                        rules: roomRules || 'No rules set',
-                        kicked_users: ''
-                    }
-                ]);
-            
-            if (error) {
-                console.error('Error creating room:', error);
-                alert('Error creating room: ' + error.message);
-                return;
-            }
-            
-            // Save room to localStorage for past rooms
-            const pastRooms = JSON.parse(localStorage.getItem('niamchat_past_rooms') || '[]');
-            pastRooms.push({
-                code: roomCode,
-                name: roomName,
-                username: username,
-                created: new Date().toISOString()
-            });
-            localStorage.setItem('niamchat_past_rooms', JSON.stringify(pastRooms));
-            
-            // Redirect to the room
-            window.location.href = `room.html?room=${roomCode}&user=${encodeURIComponent(username)}`;
-        });
-
         // Load past rooms from localStorage
         function loadPastRooms() {
             const pastRooms = JSON.parse(localStorage.getItem('niamchat_past_rooms') || '[]');
             const pastRoomsList = document.getElementById('pastRoomsList');
+            
+            console.log('Loading past rooms:', pastRooms.length, 'rooms found');
             
             if (pastRooms.length === 0) {
                 pastRoomsList.innerHTML = `
@@ -480,12 +445,125 @@
                     pastRooms[roomIndex].name = newName.trim();
                     localStorage.setItem('niamchat_past_rooms', JSON.stringify(pastRooms));
                     loadPastRooms();
+                    console.log('Room renamed:', roomCode, 'to', newName);
                 }
             }
         };
 
+        // Handle form submission
+        document.getElementById('createRoomForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const roomName = document.getElementById('roomName').value.trim();
+            const roomRules = document.getElementById('roomRules').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const roomCode = document.getElementById('roomCode').value.trim();
+            
+            if (!roomName || !username || !roomCode) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            if (roomCode.length !== 6) {
+                alert('Room code must be exactly 6 characters');
+                return;
+            }
+            
+            // Disable button to prevent double submission
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Creating...';
+            
+            try {
+                console.log('Checking if room exists:', roomCode);
+                
+                // Check if room code already exists
+                const { data: existingRooms, error: checkError } = await supabaseClient
+                    .from('rooms')
+                    .select('room_code')
+                    .eq('room_code', roomCode);
+                
+                if (checkError) {
+                    console.error('Error checking room:', checkError);
+                    throw checkError;
+                }
+                
+                console.log('Existing rooms check:', existingRooms);
+                
+                if (existingRooms && existingRooms.length > 0) {
+                    alert('Room code already exists. Please generate a new one.');
+                    generateRoomCode();
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Create Room';
+                    return;
+                }
+                
+                console.log('Creating room in database:', { roomCode, roomName, username });
+                
+                // Create the room
+                const { data, error } = await supabaseClient
+                    .from('rooms')
+                    .insert([
+                        {
+                            room_code: roomCode,
+                            room_name: roomName,
+                            creator_username: username,
+                            rules: roomRules || 'No rules set',
+                            kicked_users: ''
+                        }
+                    ]);
+                
+                if (error) {
+                    console.error('Database error:', error);
+                    throw error;
+                }
+                
+                console.log('Room created successfully in database:', roomCode);
+                
+                // Save room to localStorage for past rooms
+                const pastRooms = JSON.parse(localStorage.getItem('niamchat_past_rooms') || '[]');
+                
+                // Check if this room already exists in past rooms
+                const roomExists = pastRooms.some(r => r.code === roomCode);
+                if (!roomExists) {
+                    pastRooms.push({
+                        code: roomCode,
+                        name: roomName,
+                        username: username,
+                        created: new Date().toISOString()
+                    });
+                    localStorage.setItem('niamchat_past_rooms', JSON.stringify(pastRooms));
+                    console.log('Room saved to localStorage:', pastRooms);
+                } else {
+                    console.log('Room already in localStorage, not adding duplicate');
+                }
+                
+                // Show success message before redirect
+                alert(`Room "${roomName}" created successfully! Code: ${roomCode}`);
+                
+                // Refresh the past rooms list
+                loadPastRooms();
+                
+                // Wait a moment so user can see it was added
+                setTimeout(() => {
+                    // Redirect to the room
+                    window.location.href = `room.html?room=${roomCode}&user=${encodeURIComponent(username)}`;
+                }, 500);
+                
+            } catch (error) {
+                console.error('Error creating room:', error);
+                alert('Error creating room: ' + error.message);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Create Room';
+            }
+        });
+
         // Load past rooms on page load
-        loadPastRooms();
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Create Room page loaded');
+            loadPastRooms();
+            debugLocalStorage(); // Show initial state
+        });
     </script>
 </body>
 </html>
