@@ -9,121 +9,136 @@
         /* Additional styles for create-room page */
         .create-room-page {
             padding: 0;
+            max-width: 1200px;
+            width: 100%;
         }
         
         .page-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
         }
         
         .header-title {
-            font-size: 32px;
+            font-size: 36px;
             margin-bottom: 10px;
         }
         
         .header-subtitle {
             opacity: 0.9;
             font-weight: 300;
+            font-size: 18px;
         }
         
         .nav-menu {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
             background: white;
-            padding: 15px;
+            padding: 20px;
             border-bottom: 1px solid #eee;
         }
         
         .nav-btn {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: 8px;
+            gap: 10px;
+            padding: 12px 24px;
+            border-radius: 10px;
             text-decoration: none;
             color: #666;
             font-weight: 500;
+            font-size: 16px;
             transition: all 0.3s ease;
         }
         
         .nav-btn:hover {
             background: #f5f5f5;
             color: #667eea;
+            transform: translateY(-2px);
         }
         
         .nav-btn.active {
             background: #667eea;
             color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
         
         .page-content {
             display: flex;
-            min-height: 500px;
+            min-height: 600px;
+            gap: 0;
         }
         
         .left-panel {
             flex: 1;
-            padding: 30px;
+            padding: 40px;
             border-right: 1px solid #eee;
+            min-width: 0;
         }
         
         .right-panel {
             flex: 1;
-            padding: 30px;
+            padding: 40px;
             background: #f9f9f9;
+            min-width: 0;
         }
         
         .panel-title {
-            font-size: 20px;
-            margin-bottom: 20px;
+            font-size: 24px;
+            margin-bottom: 30px;
             color: #333;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         .form-label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 500;
             color: #555;
+            font-size: 16px;
         }
         
         .form-input {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            padding: 15px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
             font-size: 16px;
-            transition: border 0.3s ease;
+            transition: all 0.3s ease;
+            background: #fdfdfd;
         }
         
         .form-input:focus {
             outline: none;
             border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            background: white;
         }
         
         textarea.form-input {
-            min-height: 150px;
+            min-height: 180px;
             resize: vertical;
             font-family: inherit;
+            line-height: 1.5;
         }
         
         .create-btn {
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
@@ -131,32 +146,62 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
+            margin-top: 10px;
         }
         
         .create-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
         }
         
         .past-rooms-list {
             list-style: none;
+            max-height: 450px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .past-rooms-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .past-rooms-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .past-rooms-list::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        .past-rooms-list::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
         }
         
         .past-room-item {
             background: white;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .past-room-item:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
         .room-info h4 {
-            margin: 0 0 5px 0;
+            margin: 0 0 8px 0;
             color: #333;
+            font-size: 18px;
         }
         
         .room-info p {
@@ -167,17 +212,19 @@
         
         .room-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
         
         .action-btn {
-            padding: 6px 12px;
-            border-radius: 6px;
-            border: 1px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
             background: white;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 500;
             transition: all 0.3s ease;
+            min-width: 70px;
         }
         
         .action-btn.join {
@@ -188,6 +235,8 @@
         
         .action-btn.join:hover {
             background: #5a6fd8;
+            border-color: #5a6fd8;
+            transform: translateY(-1px);
         }
         
         .action-btn.rename {
@@ -197,41 +246,129 @@
         
         .action-btn.rename:hover {
             background: #e9ecef;
+            transform: translateY(-1px);
         }
         
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
             color: #999;
         }
         
         .empty-state svg {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 15px;
+            width: 64px;
+            height: 64px;
+            margin-bottom: 20px;
             opacity: 0.5;
+        }
+        
+        .empty-state p {
+            font-size: 16px;
+            margin: 0;
+        }
+        
+        .debug-btn {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .debug-btn:hover {
+            background: #e9ecef;
+            border-color: #ccc;
+        }
+        
+        .code-generator {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .code-generator .form-input {
+            flex: 1;
+        }
+        
+        .code-generator .action-btn {
+            white-space: nowrap;
+            padding: 12px 20px;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 1024px) {
+            .create-room-page {
+                max-width: 95%;
+            }
+            
+            .page-content {
+                min-height: 500px;
+            }
         }
         
         @media (max-width: 768px) {
             .page-content {
                 flex-direction: column;
+                min-height: auto;
             }
             
             .left-panel {
                 border-right: none;
-                border-bottom: 1px solid #eee;
+                border-bottom: 2px solid #eee;
+                padding: 30px 25px;
+            }
+            
+            .right-panel {
+                padding: 30px 25px;
+            }
+            
+            .panel-title {
+                font-size: 22px;
+            }
+            
+            .nav-menu {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .nav-btn {
+                flex: 1;
+                min-width: 120px;
+                justify-content: center;
             }
         }
         
-        .debug-btn {
-            margin-top: 10px;
-            padding: 8px 12px;
-            background: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            width: 100%;
+        @media (max-width: 480px) {
+            .create-room-page {
+                max-width: 100%;
+                border-radius: 0;
+            }
+            
+            .page-header {
+                padding: 30px 20px;
+            }
+            
+            .header-title {
+                font-size: 28px;
+            }
+            
+            .left-panel, .right-panel {
+                padding: 25px 20px;
+            }
+            
+            .room-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -265,7 +402,7 @@
                 Join Room
             </a>
             
-            <a href="https://niamco.github.io/niamchatt/" class="nav-btn">
+            <a href="https://niamco.github.io/niamchat/" class="nav-btn">
                 <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
                     <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -307,11 +444,11 @@
                     
                     <div class="form-group">
                         <label class="form-label">Room Code (Auto-generated)</label>
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <input type="text" class="form-input" id="roomCode" placeholder="Click generate" readonly style="flex: 1;">
-                            <button type="button" id="generateCode" class="action-btn" style="white-space: nowrap;">Generate</button>
+                        <div class="code-generator">
+                            <input type="text" class="form-input" id="roomCode" placeholder="Click generate" readonly>
+                            <button type="button" id="generateCode" class="action-btn" style="background: #4CAF50; color: white; border-color: #4CAF50;">Generate</button>
                         </div>
-                        <small style="color: #666; margin-top: 5px; display: block;">Room code will be 6 characters like ABC123</small>
+                        <small style="color: #666; margin-top: 8px; display: block; font-size: 14px;">Room code will be 6 alphanumeric characters (e.g., ABC123, F8GH1E)</small>
                     </div>
                     
                     <button type="submit" class="create-btn">
@@ -325,7 +462,9 @@
                         Create Room
                     </button>
                     
-                   
+                    <button type="button" onclick="debugLocalStorage()" class="debug-btn">
+                        Debug localStorage (Check Console)
+                    </button>
                 </form>
             </div>
 
@@ -343,7 +482,7 @@
                 <ul class="past-rooms-list" id="pastRoomsList">
                     <!-- Past rooms will be loaded here -->
                     <li class="empty-state">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
                             <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
                             <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
@@ -355,10 +494,10 @@
         </div>
     </div>
 
-       <!-- Load Supabase library -->
+    <!-- Load Supabase library -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     
-    <!-- Your configuration and main script -->
+    <!-- Configuration and main script -->
     <script>
         // ========== SUPABASE CONFIGURATION ==========
         const SUPABASE_URL = 'https://zfxyjvuadrhlborbwige.supabase.co';
@@ -379,9 +518,6 @@
         }
         
         // ========== YOUR MAIN SCRIPT CODE ==========
-        // (Copy ALL your existing JavaScript code from the previous create-room.html here,
-        // starting from the "// Debug function to check localStorage" line)
-        
         // Debug function to check localStorage
         function debugLocalStorage() {
             const pastRooms = JSON.parse(localStorage.getItem('niamchat_past_rooms') || '[]');
@@ -420,7 +556,7 @@
             if (pastRooms.length === 0) {
                 pastRoomsList.innerHTML = `
                     <li class="empty-state">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
                             <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
                             <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
