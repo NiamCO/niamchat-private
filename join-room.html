@@ -1,1 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Room - NiamChat</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Additional styles for join-room page */
+        .join-room-page {
+            padding: 0;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header-title {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header-subtitle {
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            background: white;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: #f5f5f5;
+            color: #667eea;
+        }
+        
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .join-form-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        
+        .join-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eee;
+        }
+        
+        .form-title {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #333;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .join-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .join-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .join-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #fcc;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .error-message.show {
+            display: flex;
+        }
+        
+        .success-message {
+            background: #efe;
+            color: #393;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #cfc;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .success-message.show {
+            display: flex;
+        }
+        
+        .room-info {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid #eee;
+            display: none;
+        }
+        
+        .room-info.show {
+            display: block;
+        }
+        
+        .room-info h4 {
+            margin: 0 0 15px 0;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .rules-section {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .rules-section h5 {
+            margin: 0 0 10px 0;
+            color: #666;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .rules-content {
+            color: #555;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+        
+        .creator-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        @media (max-width: 480px) {
+            .join-card {
+                padding: 30px 20px;
+            }
+            
+            .form-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container join-room-page">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="header-title">Join Private Room</h1>
+            <p class="header-subtitle">Enter a room code to join an existing chat</p>
+        </div>
 
+        <!-- Navigation Menu -->
+        <div class="nav-menu">
+            <a href="create-room.html" class="nav-btn">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 .83.18 2 2 0 0 0 .83-.18l8.58-3.9a1 1 0 0 0 0-1.831z"/>
+                    <path d="M16 17h6"/>
+                    <path d="M19 14v6"/>
+                    <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 .825.178"/>
+                    <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l2.116-.962"/>
+                </svg>
+                Create Room
+            </a>
+            
+            <a href="join-room.html" class="nav-btn active">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
+                    <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
+                    <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+                </svg>
+                Join Room
+            </a>
+            
+            <a href="https://niamco.github.io/niamchat/" class="nav-btn">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+                    <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                </svg>
+                Back to Main
+            </a>
+        </div>
+
+        <!-- Join Form -->
+        <div class="join-form-container">
+            <div class="join-card">
+                <h2 class="form-title">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
+                        <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
+                        <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+                    </svg>
+                    Enter Room Details
+                </h2>
+                
+                <!-- Error Message -->
+                <div class="error-message" id="errorMessage">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
+                        <path d="M12 9v4"/>
+                        <path d="M12 17h.01"/>
+                    </svg>
+                    <span id="errorText"></span>
+                </div>
+                
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 6 9 17l-5-5"/>
+                    </svg>
+                    <span id="successText">Room found! You can join now.</span>
+                </div>
+                
+                <form id="joinRoomForm">
+                    <div class="form-group">
+                        <label class="form-label" for="roomCode">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-key-icon lucide-key">
+                                <path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 2.7a1 1 0 0 0-1.4 0l-2.1 2.1a1 1 0 0 0 0 1.4Z"/>
+                                <path d="m21 2-9.6 9.6"/>
+                                <circle cx="7.5" cy="15.5" r="5.5"/>
+                            </svg>
+                            Room Code
+                        </label>
+                        <input type="text" class="form-input" id="roomCode" placeholder="Enter 6-character code (e.g., ABC123)" maxlength="6" required>
+                        <small style="color: #666; margin-top: 5px; display: block;">Enter the 6-character code provided by the room creator</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="username">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            Your Username
+                        </label>
+                        <input type="text" class="form-input" id="username" placeholder="Enter your username" required>
+                        <small style="color: #666; margin-top: 5px; display: block;">This name will be displayed in the chat</small>
+                    </div>
+                    
+                    <button type="submit" class="join-btn" id="joinBtn">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
+                            <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
+                            <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+                        </svg>
+                        Join Room
+                    </button>
+                </form>
+                
+                <!-- Room Info (shown after checking room) -->
+                <div class="room-info" id="roomInfo">
+                    <h4>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
+                            <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
+                            <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+                        </svg>
+                        Room Information
+                        <span class="creator-badge" id="creatorBadge">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11.051 7.616a1 1 0 0 1 1.909.024l.737 1.452a1 1 0 0 0 .737.535l1.634.256a1 1 0 0 1 .588 1.806l-1.172 1.168a1 1 0 0 0-.282.866l.259 1.613a1 1 0 0 1-1.541 1.134l-1.465-.75a1 1 0 0 0-.912 0l-1.465.75a1 1 0 0 1-1.539-1.133l.258-1.613a1 1 0 0 0-.282-.867l-1.156-1.152a1 1 0 0 1 .572-1.822l1.633-.256a1 1 0 0 0 .737-.535z"/>
+                                <circle cx="12" cy="12" r="10"/>
+                            </svg>
+                            Creator
+                        </span>
+                    </h4>
+                    
+                    <p><strong>Room Name:</strong> <span id="roomNameDisplay">Loading...</span></p>
+                    <p><strong>Created by:</strong> <span id="roomCreator">Loading...</span></p>
+                    <p><strong>Created on:</strong> <span id="roomCreated">Loading...</span></p>
+                    
+                    <div class="rules-section" id="rulesSection">
+                        <h5>Room Rules</h5>
+                        <div class="rules-content" id="rulesContent">No rules set</div>
+                    </div>
+                    
+                    <button class="join-btn" id="confirmJoinBtn" style="margin-top: 20px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>
+                            <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/>
+                            <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+                        </svg>
+                        Join This Room
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Supabase library -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- Configuration and main script -->
+    <script>
+        // ========== SUPABASE CONFIGURATION ==========
+        const SUPABASE_URL = 'https://zfxyjvuadrhlborbwige.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmeHlqdnVhZHJobGJvcmJ3aWdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3MzAwMjUsImV4cCI6MjA4MTMwNjAyNX0.8RDKHD45xqr5Nz5FqXpF5fjRbZrVqrT6pCi4s-k2zvM';
+        
+        // Initialize Supabase
+        let supabaseClient;
+        try {
+            if (!window.supabase) {
+                throw new Error('Supabase library not loaded');
+            }
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            window.supabaseClient = supabaseClient;
+            console.log('✅ Supabase initialized successfully for join room');
+        } catch (error) {
+            console.error('❌ Failed to initialize Supabase:', error);
+            showError('Cannot connect to database. Please refresh the page.');
+        }
+        
+        // ========== DOM ELEMENTS ==========
+        const joinRoomForm = document.getElementById('joinRoomForm');
+        const roomCodeInput = document.getElementById('roomCode');
+        const usernameInput = document.getElementById('username');
+        const joinBtn = document.getElementById('joinBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const successMessage = document.getElementById('successMessage');
+        const roomInfo = document.getElementById('roomInfo');
+        const roomNameDisplay = document.getElementById('roomNameDisplay');
+        const roomCreator = document.getElementById('roomCreator');
+        const roomCreated = document.getElementById('roomCreated');
+        const rulesContent = document.getElementById('rulesContent');
+        const rulesSection = document.getElementById('rulesSection');
+        const creatorBadge = document.getElementById('creatorBadge');
+        const confirmJoinBtn = document.getElementById('confirmJoinBtn');
+        
+        let currentRoomData = null;
+        let currentUsername = '';
+        
+        // ========== HELPER FUNCTIONS ==========
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.classList.add('show');
+            successMessage.classList.remove('show');
+            roomInfo.classList.remove('show');
+        }
+        
+        function hideError() {
+            errorMessage.classList.remove('show');
+        }
+        
+        function showSuccess() {
+            successMessage.classList.add('show');
+            errorMessage.classList.remove('show');
+        }
+        
+        function hideSuccess() {
+            successMessage.classList.remove('show');
+        }
+        
+        function showRoomInfo() {
+            roomInfo.classList.add('show');
+            showSuccess();
+        }
+        
+        function hideRoomInfo() {
+            roomInfo.classList.remove('show');
+        }
+        
+        function setLoading(isLoading) {
+            joinBtn.disabled = isLoading;
+            joinBtn.innerHTML = isLoading ? 
+                'Checking Room...' : 
+                '<svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg> Join Room';
+        }
+        
+        // ========== ROOM VALIDATION ==========
+        async function validateRoom(roomCode, username) {
+            if (!supabaseClient) {
+                showError('Database connection not available');
+                return false;
+            }
+            
+            // Basic validation
+            if (!roomCode || roomCode.length !== 6) {
+                showError('Room code must be exactly 6 characters');
+                return false;
+            }
+            
+            if (!username || username.trim().length === 0) {
+                showError('Please enter a username');
+                return false;
+            }
+            
+            if (username.length > 20) {
+                showError('Username must be 20 characters or less');
+                return false;
+            }
+            
+            // Convert to uppercase for consistency
+            const formattedRoomCode = roomCode.toUpperCase().trim();
+            const formattedUsername = username.trim();
+            
+            setLoading(true);
+            hideError();
+            hideSuccess();
+            hideRoomInfo();
+            
+            try {
+                console.log('Checking room:', formattedRoomCode);
+                
+                // Check if room exists
+                const { data: rooms, error: roomError } = await supabaseClient
+                    .from('rooms')
+                    .select('*')
+                    .eq('room_code', formattedRoomCode)
+                    .single();
+                
+                if (roomError) {
+                    if (roomError.code === 'PGRST116') { // No rows returned
+                        showError('Room not found. Please check the room code.');
+                    } else {
+                        console.error('Error checking room:', roomError);
+                        showError('Error checking room: ' + roomError.message);
+                    }
+                    setLoading(false);
+                    return false;
+                }
+                
+                console.log('Room found:', rooms);
+                currentRoomData = rooms;
+                currentUsername = formattedUsername;
+                
+                // Check if user is kicked
+                const kickedUsers = rooms.kicked_users || '';
+                if (kickedUsers.includes(formattedUsername)) {
+                    showError('You have been kicked from this room and cannot rejoin.');
+                    setLoading(false);
+                    return false;
+                }
+                
+                // Check if username is already in use in active users
+                const { data: activeUsers, error: activeError } = await supabaseClient
+                    .from('active_users')
+                    .select('username')
+                    .eq('room_code', formattedRoomCode)
+                    .eq('username', formattedUsername);
+                
+                if (activeError) {
+                    console.error('Error checking active users:', activeError);
+                    // Continue anyway, this is not critical
+                }
+                
+                if (activeUsers && activeUsers.length > 0) {
+                    showError('Username already taken in this room. Please choose a different name.');
+                    setLoading(false);
+                    return false;
+                }
+                
+                // Show room information
+                updateRoomInfoDisplay();
+                showRoomInfo();
+                setLoading(false);
+                return true;
+                
+            } catch (error) {
+                console.error('Error validating room:', error);
+                showError('An error occurred: ' + error.message);
+                setLoading(false);
+                return false;
+            }
+        }
+        
+        function updateRoomInfoDisplay() {
+            if (!currentRoomData) return;
+            
+            roomNameDisplay.textContent = currentRoomData.room_name || 'Unnamed Room';
+            roomCreator.textContent = currentRoomData.creator_username || 'Unknown';
+            
+            // Format date
+            if (currentRoomData.created_at) {
+                const date = new Date(currentRoomData.created_at);
+                roomCreated.textContent = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            } else {
+                roomCreated.textContent = 'Unknown';
+            }
+            
+            // Show rules if they exist
+            if (currentRoomData.rules && currentRoomData.rules.trim() !== '' && currentRoomData.rules !== 'No rules set') {
+                rulesContent.textContent = currentRoomData.rules;
+                rulesSection.style.display = 'block';
+            } else {
+                rulesSection.style.display = 'none';
+            }
+            
+            // Show creator badge
+            if (currentUsername === currentRoomData.creator_username) {
+                creatorBadge.style.display = 'inline-flex';
+            } else {
+                creatorBadge.style.display = 'none';
+            }
+        }
+        
+        // ========== EVENT HANDLERS ==========
+        joinRoomForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const roomCode = roomCodeInput.value.trim();
+            const username = usernameInput.value.trim();
+            
+            await validateRoom(roomCode, username);
+        });
+        
+        confirmJoinBtn.addEventListener('click', async function() {
+            if (!currentRoomData || !currentUsername) {
+                showError('Please check the room first');
+                return;
+            }
+            
+            // Add user to active users
+            try {
+                const { error } = await supabaseClient
+                    .from('active_users')
+                    .insert([
+                        {
+                            room_code: currentRoomData.room_code,
+                            username: currentUsername,
+                            is_typing: false
+                        }
+                    ]);
+                
+                if (error) {
+                    console.error('Error adding user to active users:', error);
+                    // Continue anyway, this is not critical for joining
+                }
+                
+                // Add room to past rooms in localStorage
+                const pastRooms = JSON.parse(localStorage.getItem('niamchat_past_rooms') || '[]');
+                const roomExists = pastRooms.some(r => r.code === currentRoomData.room_code);
+                
+                if (!roomExists) {
+                    pastRooms.push({
+                        code: currentRoomData.room_code,
+                        name: currentRoomData.room_name,
+                        username: currentUsername,
+                        created: new Date().toISOString()
+                    });
+                    localStorage.setItem('niamchat_past_rooms', JSON.stringify(pastRooms));
+                }
+                
+                // Redirect to the room
+                window.location.href = `room.html?room=${currentRoomData.room_code}&user=${encodeURIComponent(currentUsername)}`;
+                
+            } catch (error) {
+                console.error('Error joining room:', error);
+                showError('Error joining room: ' + error.message);
+            }
+        });
+        
+        // Real-time room code validation on input
+        roomCodeInput.addEventListener('input', function() {
+            // Convert to uppercase as user types
+            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            
+            // Hide messages when user changes room code
+            if (this.value.length === 6) {
+                // Auto-check room if 6 characters entered
+                const username = usernameInput.value.trim();
+                if (username) {
+                    validateRoom(this.value, username);
+                }
+            } else {
+                hideRoomInfo();
+                hideSuccess();
+            }
+        });
+        
+        usernameInput.addEventListener('input', function() {
+            // Hide room info when username changes
+            hideRoomInfo();
+            hideSuccess();
+        });
+        
+        // Load any existing room code from URL
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Join Room page loaded');
+            
+            // Check URL for room code parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const roomCodeFromUrl = urlParams.get('room');
+            const usernameFromUrl = urlParams.get('user');
+            
+            if (roomCodeFromUrl) {
+                roomCodeInput.value = roomCodeFromUrl.toUpperCase();
+            }
+            
+            if (usernameFromUrl) {
+                usernameInput.value = decodeURIComponent(usernameFromUrl);
+            }
+            
+            // If both are provided, auto-validate
+            if (roomCodeFromUrl && usernameFromUrl) {
+                setTimeout(() => {
+                    validateRoom(roomCodeFromUrl, decodeURIComponent(usernameFromUrl));
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>
